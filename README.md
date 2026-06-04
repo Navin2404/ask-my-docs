@@ -1,56 +1,27 @@
-User Question
-      ↓
-┌─────────────────────────────────────────┐
-│           HYBRID RETRIEVAL              │
-│                                         │
-│   BM25 Search     +    Vector Search    │
-│  (Keyword-based)     (Semantic/Meaning) │
-│         └──────────┬────────────────┘  │
-│                    ↓                    │
-│         Cross-Encoder Reranking         │
-│      (Picks the most relevant chunks)   │
-└─────────────────────────────────────────┘
-      ↓
-  Top 5 Relevant Chunks
-      ↓
-  GPT-3.5 Turbo → Answer + Citations
-      ↓
-  "The leave policy states 25 days per year. [Source: leave_policy.txt, Page: 1]"
+Ask My Docs — Production RAG Application
+Upload your documents and ask questions in natural language. Get accurate answers with source citations.
+What it does
 
+Upload PDF or TXT files
+Ask questions about your documents
+Get answers with exact source citations (filename + page number)
+AI answers only from your documents — no random hallucination
 
-Project Structure
-ask-my-docs/
-│
-├── data/                          # Your documents go here
-│   ├── leave_policy.txt
-│   ├── employee_handbook.txt
-│   ├── it_support_policy.txt
-│   └── performance_review.txt
-│
-├── src/
-│   ├── ingestion/
-│   │   └── document_loader.py     # PDF & TXT loading + chunking
-│   │
-│   ├── retrieval/
-│   │   ├── vector_store.py        # ChromaDB vector search
-│   │   ├── bm25_search.py         # BM25 keyword search
-│   │   └── hybrid_search.py       # Combines both searches (RRF)
-│   │
-│   ├── reranking/
-│   │   └── reranker.py            # Cross-encoder reranking
-│   │
-│   ├── generation/
-│   │   └── rag_chain.py           # LLM answer generation with citations
-│   │
-│   ├── evaluation/
-│   │   └── eval_pipeline.py       # Automated quality evaluation
-│   │
-│   └── pipeline.py                # Master pipeline connecting all modules
-│
-├── app.py                         # Streamlit web application
-├── requirements.txt               # Python dependencies
-├── .env.example                   # Environment variables template
-├── .gitignore
-└── .github/
-    └── workflows/
-        └── eval_ci.yml            # CI/CD pipeline
+Tech Stack
+
+LLM — OpenAI GPT-3.5 Turbo
+Vector Database — ChromaDB
+Search — Hybrid Search (BM25 + Vector Search)
+Reranking — Cross-Encoder (sentence-transformers)
+Framework — LangChain
+UI — Streamlit
+CI/CD — GitHub Actions
+Language — Python 3.11
+
+Key Concepts
+
+BM25 Search — Keyword-based search (finds exact word matches)
+Vector Search — Semantic search (finds meaning-based matches)
+Hybrid Search — Combines both for better accuracy
+Reranking — Picks the most relevant results from the combined search
+Citation Enforcement — Every answer includes the source document and page number
