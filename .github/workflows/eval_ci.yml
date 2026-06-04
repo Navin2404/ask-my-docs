@@ -1,0 +1,49 @@
+# .github/workflows/eval_ci.yml
+# GitHub-la push pannum podhu automatically tests run aagum
+
+name: RAG Evaluation CI
+
+on:
+  push:
+    branches: [ main ]   # main branch-la push aana run aagum
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest  # Linux machine-la run aagum
+
+    steps:
+    # Code checkout pannu
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Python setup
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    # Dependencies install
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    # Sample documents create (testing-ku)
+    - name: Create test data
+      run: |
+        mkdir -p data
+        echo "Annual leave policy: Employees get 15 days annual leave per year." > data/policy.txt
+        echo "Sick leave policy: Employees can apply for sick leave using Form SL-01." >> data/policy.txt
+
+    # Evaluation run pannu
+    - name: Run RAG Evaluation
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # GitHub secrets-la add pannu
+      run: python src/evaluation/eval_pipeline.py
+
+    # Results upload
+    - name: Upload eval results
+      uses: actions/upload-artifact@v3
+      with:
+        name: eval-results
+        path: eval_results.json
