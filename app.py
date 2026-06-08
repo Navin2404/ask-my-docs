@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 st.title("📚 Ask My Docs")
-st.subheader("Unnoda documents-ai AI-kitta kelu!")
+st.subheader("Ask Questions related to documents!")
 
 
 # Pipeline-ai cache pannrom - ovvoru question-kum reload aagaama
@@ -64,7 +64,7 @@ question = st.text_input(
 
 if st.button("🔍 Ask", type="primary") and question:
 
-    with st.spinner("Thedrom... ⏳"):
+    with st.spinner("Searching... ⏳"):
         try:
             # Pipeline get pannu
             pipeline = get_pipeline()
